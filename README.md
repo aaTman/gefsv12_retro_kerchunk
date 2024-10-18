@@ -25,3 +25,13 @@ client = ut.start_dask_clusters(
 ```
 
 Will get that spun up for you as a convenient wrapper. You can also instantiate a LocalCluster on your own for more control over your environment.
+
+## Installation
+
+```
+git clone https://github.com/aaTman/gefsv12_retro_kerchunk.git
+cd gefsv12_retro_kerchunk
+pip install -e .
+```
+
+PyPi soon! I want to set up testing and make sure more cases are handled beyond MSLP.
