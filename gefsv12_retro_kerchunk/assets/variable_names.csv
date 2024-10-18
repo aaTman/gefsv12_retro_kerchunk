@@ -1,0 +1,38 @@
+variable_(units),variable_code
+Mean sea-level pressure (Pa),pres_msl
+Surface pressure (Pa),pres_sfc
+Surface height (gpm),hgt_sfc
+Skin temperature (K),tmp_sfc
+"Soil temperature at 4 levels: 0.0-0.1, 0.1-0.4, 0.4-1.0 and 1.-2. m depth (K)",tsoil_bgrnd
+"Volumetric soil moisture content at 4 levels: 0.0-0.1, 0.1-0.4, 0.4-1.0 and 1.-2. m depth (fraction between wilting and saturation)",soilw_bgrnd
+"Water equivalent of accumulated snow depth (kg m^-2, i.e., mm)",weasd_sfc
+2-meter temperature (K),tmp_2m
+2-meter specific humidity (kg kg^-1 dry air),spfh_2m
+"Maximum temperature (K) in last 6-h period (00, 06, 12, 18 UTC) or in last 3-h period (03, 09, 15, 21 UTC)",tmax_2m
+"Minimum temperature (K) in last 6-h period (00, 06, 12, 18 UTC) or in last 3-h period (03, 09, 15, 21 UTC)",tmin_2m
+Surface wind gust (m/s),gust_sfc
+"Surface wind stress, u and v components","uflx_sfc, vflx_sfc"
+Surface roughness (m),sfcr_sfc
+"Total precipitation (kg m^-2, i.e., mm) sum over the last 6-h period (00, 06, 12, 18 UTC) or the last 3-h period (03, 09, 15, 21 UTC)",apcp_sfc
+"Convective precipitation (kg m^-2, i.e., mm) sum over the last 6-h period (00, 06, 12, 18 UTC) or the last 3-h period (03, 09, 15, 21 UTC)",acpcp_sfc
+"Non-convective precipitation (kg m^-2, i.e., mm) sum over the last 6-h period (00, 06, 12, 18 UTC) or the last 3-h period (03, 09, 15, 21 UTC)",ncpcp_sfc
+Boundary layer height (m),pbl_hgt
+Cloud ceiling (gpm),hgt_ceiling
+"Water runoff (kg m^-2, i.e., mm) sum over the last 6-h period (00, 06, 12, 18 UTC) or in last 3-h period (03, 09, 15, 21 UTC)",watr_sfc
+"Average surface latent heat net flux (W m^-2) average in last 6-h period (00, 06, 12, 18 UTC) or in last 3-h period (03, 09, 15, 21 UTC)",lhtfl_sfc
+"Average surface sensible heat net flux (W m^-2) average in last 6-h period (00, 06, 12, 18 UTC) or in last 3-h period (03, 09, 15, 21 UTC)",shtfl_sfc
+"Average ground heat net flux (W m^-2) average in last 6-h period (00, 06, 12, 18 UTC) or in last 3-h period (03, 09, 15, 21 UTC)",gflux_sfc
+Convective available potential energy (J kg^-1),cape_sfc
+Convective inhibition (J kg^-1),cin_sfc
+0-3 km Storm relative helicity,hlcy_hgt
+"Precipitable water (kg m^-2, i.e., mm)",pwat_eatm
+Total ozone (Dobson unit),tozne_eatm
+"Total cloud cover (%) average in last 6-h period (00, 06, 12, 18 UTC) or in last 3-h period (03, 09, 15, 21 UTC)",tcdc_eatm
+"Downward short-wave radiation flux at the surface (W m^-2) average in last 6-h period (00, 06, 12, 18 UTC) or in last 3-h period (03, 09, 15, 21 UTC)",dswrf_sfc
+"Downward long-wave radiation flux at the surface (W m^-2) average in last 6-h period (00, 06, 12, 18 UTC) or in last 3-h period (03, 09, 15, 21 UTC)",dlwrf_sfc
+"Upward short-wave radiation flux at the surface (W m^-2) average in last 6-h period (00, 06, 12, 18 UTC) or in last 3-h period (03, 09, 15, 21 UTC)",uswrf_sfc
+"Upward long-wave radiation flux at the surface (W m^-2) average in last 6-h period (00, 06, 12, 18 UTC) or in last 3-h period (03, 09, 15, 21 UTC)",ulwrf_sfc
+Upward long-wave radiation flux at the top of the atmosphere (W m^-2),ulwrf_tatm
+"Potential vorticity on the 310, 320 and 350K isentropic surfaces (×10^-6 K m^2 kg^-1 s^-1)",pvort_isen
+"Momentum Flux, U-Component [N/m^2] average in last 6-h period (00, 06, 12, 18 UTC) or in last 3-h period (03, 09, 15, 21 UTC)",uflx_sfc
+"Momentum Flux, V-Component [N/m^2] average in last 6-h period (00, 06, 12, 18 UTC) or in last 3-h period (03, 09, 15, 21 UTC)",vflx_sfc

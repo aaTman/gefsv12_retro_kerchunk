@@ -1,0 +1,11 @@
+dask==2024.9.1
+fsspec==2024.9.0
+kerchunk==0.2.6.post95
+nest_asyncio==1.6.0
+numpy==2.1.2
+pandas==2.2.3
+pytz==2024.1
+pytz==2024.2
+setuptools==75.1.0
+ujson==5.10.0
+xarray==2024.9.0
