@@ -10,7 +10,7 @@ Simply:
 from gefsv12_retro_kerchunk.kerchunk_zarr import RetrospectivePull
 retro = RetrospectivePull()
 retro.generate_json_files()
-ds = retro.generate_kerchunk(return_ds=True)
+ds = retro.generate_kerchunk(ds=True)
 ```
 
 This pulls a 21 day window centered on the current date for MSLP: all 20 years of data, all latitudes and longitudes, all 5 members, for one time step (default is hour 0). In this approach, members are currently set to represent the exact string in the file name (e.g. c00, p01, etc.). For the default case, which is 420 unique times, 5 members, for the entire globe, this took 34.2 seconds to run on an i9-10900k (10 cores, 20 threads), 32gb RAM, GTX 1080ti personal computer.
@@ -19,7 +19,7 @@ Note: running something like ds.mean(dim='member') without instantiating a dask 
 
 ```python
 import gefsv12_retro_kerchunk.utils as ut
-client = ut.start_dask_clusters(
+client = ut.start_dask_cluster(
     n_workers=8, threads_per_worker=2, memory_limit="2GiB"
 )
 ```
