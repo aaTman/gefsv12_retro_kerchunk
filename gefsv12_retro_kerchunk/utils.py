@@ -1,5 +1,5 @@
 import xarray as xr
-from dask.distributed import LocalCluster, Client
+from dask.distributed import Client, LocalCluster
 
 
 def create_xarray_from_kerchunks(fo):
@@ -22,10 +22,10 @@ def create_xarray_from_kerchunks(fo):
 def start_dask_cluster(
     n_workers: int = 8, threads_per_worker: int = 2, memory_limit: str = "2GiB"
 ):
-    n_workers = 8
-    threads_per_worker = 2
     cluster = LocalCluster(
-        n_workers=n_workers, threads_per_worker=threads_per_worker, memory_limit="2GB"
+        n_workers=n_workers,
+        threads_per_worker=threads_per_worker,
+        memory_limit=memory_limit,
     )
     client = Client(cluster)
     return client
