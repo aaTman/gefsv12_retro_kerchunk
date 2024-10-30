@@ -97,8 +97,9 @@ class RetrospectivePull:
 
     def fhour_to_message_num(self) -> int:
         """Converts forecast hour to message number"""
+        assert self.fhour != 0, "No hour 0 forecast available"
         assert self.fhour % 3 == 0, "Forecast hour must be divisible by 3"
-        message_num = (self.fhour) // 3
+        message_num = ((self.fhour) // 3) - 1
         return message_num
 
     def date_to_glob_pattern(self, date: datetime.datetime) -> list:
