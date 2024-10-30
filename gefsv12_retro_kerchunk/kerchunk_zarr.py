@@ -183,7 +183,7 @@ class RetrospectivePull:
             formatted_date = f"{date_string[:4]}-{date_string[4:6]}-{date_string[6:8]}T{date_string[8:]}"
             npdt64date = np.datetime64(formatted_date, "s")
             for i, n in enumerate(message_nums):
-                if i == self.fhour:
+                if i == self.message_num:
                     step_str = (
                         self.idx_files[file_location]
                         .decode("utf-8")
