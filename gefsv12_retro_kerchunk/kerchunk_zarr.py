@@ -29,8 +29,32 @@ nest_asyncio.apply()
 
 class RetrospectivePull:
     """
-    Generates metadata and pulls the GEFS Retrospective from AWS Open Data for a specific date and time range in extremely fast fashion due to consistency in the data structure (and no new updating files)
-
+    Generates metadata and pulls the GEFS Retrospective from AWS Open Data for a specific date and time range
+    in extremely fast fashion due to consistency in the data structure (and no new updating files).
+    Attributes:
+        date (Union[datetime.datetime, pd.DatetimeIndex]): The date for which to pull the data. Defaults to the current date and time in UTC.
+        fhour (int): Forecast hour. Defaults to 0.
+        directory (Optional[str]): Directory to store temporary files. If None, a temporary directory is created.
+        variable (str): The variable to pull. Defaults to "pres_msl".
+        mode (str): Mode of operation. Defaults to "mclimate_default".
+        centered_date_range (int): Range of dates centered around the given date. Defaults to 10.
+        forecast_horizon (str): Forecast horizon. Defaults to "Days:1-10".
+        members (Union[None, str, List[str]]): List of members to pull. Defaults to ["c00", "p01", "p02", "p03", "p04"].
+    Methods:
+        date_to_glob_pattern(date: datetime.datetime) -> list:
+            Ingests a single date and returns a list of month-day combinations.
+        generate_reforecast_uris(glob_patterns):
+            Generates URIs for reforecast data based on glob patterns.
+        async work_coroutine():
+            Asynchronous coroutine to fetch data and file info concurrently.
+        open_rep_file():
+            Opens and reads the representative JSON file.
+        generate_file(file, file_name):
+            Generates a JSON file from the given data and saves it to the specified file name.
+        generate_json_files():
+            Generates JSON files for the reforecast data.
+        generate_kerchunk(ds: bool = False):
+            Generates kerchunk metadata and optionally returns an xarray dataset.
     """
 
     def __init__(
@@ -51,6 +75,7 @@ class RetrospectivePull:
             self.directory = self.td.name
         self.date = date
         self.fhour = fhour
+        self.message_num = self.fhour_to_message_num()
         self.variable = variable
         self.representative_json_name = f"assets/representative_{self.variable}.json"
         self.representative_json_data = self.open_rep_file()
@@ -70,6 +95,12 @@ class RetrospectivePull:
         self.file_sizes = [n["size"] for n in self.files_info]
         self.files_metadata_dict = dict(zip(self.idx_files, self.file_sizes))
 
+    def fhour_to_message_num(self) -> int:
+        """Converts forecast hour to message number"""
+        assert self.fhour % 3 == 0, "Forecast hour must be divisible by 3"
+        message_num = (self.fhour) // 3
+        return message_num
+
     def date_to_glob_pattern(self, date: datetime.datetime) -> list:
         """Ingests a single date and returns a list of month-day combinations"""
         datetime_min = date - datetime.timedelta(days=self.centered_date_range)
@@ -82,6 +113,18 @@ class RetrospectivePull:
         return glob_patterns
 
     def generate_reforecast_uris(self, glob_patterns):
+        """
+        Generate a list of URIs for reforecast data based on provided glob patterns.
+        This method constructs URIs for reforecast data stored in an S3 bucket. It
+        iterates over a range of years, applies glob patterns, and incorporates
+        forecast members and forecast horizons to generate the final URIs.
+        Args:
+            glob_patterns (list of str): List of glob patterns to match specific
+                         reforecast data files.
+        Returns:
+            list of str: A list of URIs pointing to the reforecast data files.
+        """
+
         reforecast_patterns = [
             f"{base_s3_reforecast}{year}/{year}" for year in range(2000, 2020)
         ]
@@ -140,7 +183,7 @@ class RetrospectivePull:
             formatted_date = f"{date_string[:4]}-{date_string[4:6]}-{date_string[6:8]}T{date_string[8:]}"
             npdt64date = np.datetime64(formatted_date, "s")
             for i, n in enumerate(message_nums):
-                if i == 0:
+                if i == self.fhour:
                     step_str = (
                         self.idx_files[file_location]
                         .decode("utf-8")
@@ -171,17 +214,19 @@ class RetrospectivePull:
                     data_to_replace["refs"]["valid_time/0"] = (
                         b"base64:" + base64.b64encode(nptd64step)
                     )
+                    data_to_replace["refs"]["step/0"] = b"base64:" + base64.b64encode(
+                        np.timedelta64(step, "h")
+                    )
                     self.generate_file(
                         data_to_replace,
                         f"{file_location.split('/')[7].split('.')[0]}_{i:02}.json",
                     )
 
     def generate_kerchunk(self, ds: bool = False):
-        pattern = re.compile(r"[A-Za-z]\d\d", re.IGNORECASE)
+        pattern = re.compile(r"[A-Za-z]\d\d(?![^ ]*[\\\/])", re.IGNORECASE)
         file_list = glob.glob(f"{self.directory}/*")
-        fhour_0_files = [n for n in file_list if n.split("_")[-1].split(".")[0] == "00"]
         mzz = MultiZarrToZarr(
-            fhour_0_files,
+            file_list,
             coo_map={"member": pattern},
             concat_dims=["member", "step", "time"],
             identical_dims=["latitude", "longitude"],
