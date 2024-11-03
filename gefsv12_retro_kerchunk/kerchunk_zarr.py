@@ -191,6 +191,7 @@ class RetrospectivePull:
                         .split("\n")[i]
                         .split(":")[5]
                     )
+
                     step = int("".join(x for x in step_str if x.isdigit()))
                     nptd64step = npdt64date + np.timedelta64(step, "h")
                     if i == 0:
@@ -218,18 +219,20 @@ class RetrospectivePull:
                     data_to_replace["refs"]["step/0"] = b"base64:" + base64.b64encode(
                         np.timedelta64(step, "h")
                     )
+                    number_value = int(file_location.split('/')[5][1:])
+                    unicode_str = ''.join(f'\u{number_value:04x}')
+                    data_to_replace["refs"]["number/0"] = unicode_str.encode('utf-8')
                     self.generate_file(
                         data_to_replace,
                         f"{file_location.split('/')[7].split('.')[0]}_{i:02}.json",
                     )
 
     def generate_kerchunk(self, ds: bool = False):
-        pattern = re.compile(r"[A-Za-z]\d\d(?![^ ]*[\\\/])", re.IGNORECASE)
+        # pattern = re.compile(r"[A-Za-z]\d\d(?![^ ]*[\\\/])", re.IGNORECASE)
         file_list = glob.glob(f"{self.directory}/*")
         mzz = MultiZarrToZarr(
             file_list,
-            coo_map={"member": pattern},
-            concat_dims=["member", "step", "time"],
+            concat_dims=["number", "step", "valid_time"],
             identical_dims=["latitude", "longitude"],
         )
         multi_kerchunk = mzz.translate()
