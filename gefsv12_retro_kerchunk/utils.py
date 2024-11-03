@@ -1,6 +1,9 @@
 import xarray as xr
 from dask.distributed import Client, LocalCluster
-
+import fsspec
+import ujson
+from kerchunk.grib2 import scan_grib
+from typing import List, Optional, Union
 
 def create_xarray_from_kerchunks(fo):
     """creates a dataset based on the input location for the kerchunk zarr approach"""
@@ -29,3 +32,19 @@ def start_dask_cluster(
     )
     client = Client(cluster)
     return client
+
+def create_representative_json(
+        file_url: str, output_file: str, grib_filter: dict =  {"typeOfLevel": "meanSea"}, message_number: int = 0
+):
+    """creates a representative json file for the kerchunk zarr approach"""
+    base_s3_reforecast = "s3://noaa-gefs-retrospective/GEFSv12/reforecast/"
+    fs_read = fsspec.filesystem(
+        "s3", anon=True, skip_instance_cache=True, asynchronous=True
+    )
+    fs_local = fsspec.filesystem("", skip_instance_cache=True, use_listings_cache=False)
+    so = {"anon": True}
+    out = scan_grib(file_url, storage_options=so, filter=grib_filter)
+    for i, message in enumerate(out):
+        if i == message_number:
+            with fs_local.open(output_file, "w") as f:
+                f.write(ujson.dumps(message))

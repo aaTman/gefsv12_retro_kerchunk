@@ -176,7 +176,7 @@ class RetrospectivePull:
                         f"{file_location.split('/')[7].split('.')[0]}_{i:02}.json",
                     )
 
-    def generate_kerchunk(self, ds: bool = False):
+    def generate_kerchunk(self, ds: bool = False, kill_tmp_dir: bool = True):
         pattern = re.compile(r"[A-Za-z]\d\d", re.IGNORECASE)
         file_list = glob.glob(f"{self.directory}/*")
         fhour_0_files = [n for n in file_list if n.split("_")[-1].split(".")[0] == "00"]
@@ -187,6 +187,8 @@ class RetrospectivePull:
             identical_dims=["latitude", "longitude"],
         )
         multi_kerchunk = mzz.translate()
+        if kill_tmp_dir:
+            self.td.cleanup()
         if ds:
             ds = utils.create_xarray_from_kerchunks(multi_kerchunk)
             return ds
