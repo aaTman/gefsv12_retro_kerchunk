@@ -220,8 +220,7 @@ class RetrospectivePull:
                         np.timedelta64(step, "h")
                     )
                     number_value = int(file_location.split('/')[5][1:])
-                    unicode_str = ''.join(f'\u{number_value:04x}')
-                    data_to_replace["refs"]["number/0"] = f"\u000{number_value}\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+                    data_to_replace["refs"]["number/0"] = f"{chr(number_value)}\x00\x00\x00\x00\x00\x00\x00"
                     self.generate_file(
                         data_to_replace,
                         f"{file_location.split('/')[7].split('.')[0]}_{i:02}.json",
