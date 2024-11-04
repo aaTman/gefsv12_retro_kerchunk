@@ -5,7 +5,6 @@ import glob
 import json
 import os
 import pkgutil
-import re
 from tempfile import TemporaryDirectory
 from typing import List, Optional, Union
 
@@ -32,7 +31,8 @@ class RetrospectivePull:
     Generates metadata and pulls the GEFS Retrospective from AWS Open Data for a specific date and time range
     in extremely fast fashion due to consistency in the data structure (and no new updating files).
     Attributes:
-        date (Union[datetime.datetime, pd.DatetimeIndex]): The date for which to pull the data. Defaults to the current date and time in UTC.
+        date (Union[datetime.datetime, pd.DatetimeIndex]): The date for which to pull the data. Defaults to the current
+        date and time in UTC.
         fhour (int): Forecast hour. Defaults to 0.
         directory (Optional[str]): Directory to store temporary files. If None, a temporary directory is created.
         variable (str): The variable to pull. Defaults to "pres_msl".
@@ -219,8 +219,10 @@ class RetrospectivePull:
                     data_to_replace["refs"]["step/0"] = b"base64:" + base64.b64encode(
                         np.timedelta64(step, "h")
                     )
-                    number_value = int(file_location.split('/')[5][1:])
-                    data_to_replace["refs"]["number/0"] = f"{chr(number_value)}\x00\x00\x00\x00\x00\x00\x00"
+                    number_value = int(file_location.split("/")[5][1:])
+                    data_to_replace["refs"][
+                        "number/0"
+                    ] = f"{chr(number_value)}\x00\x00\x00\x00\x00\x00\x00"
                     self.generate_file(
                         data_to_replace,
                         f"{file_location.split('/')[7].split('.')[0]}_{i:02}.json",
