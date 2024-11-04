@@ -1,0 +1,7 @@
+{
+    "python.testing.pytestArgs": [
+        "gefsv12_retro_kerchunk"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
+}
