@@ -226,7 +226,7 @@ class RetrospectivePull:
                         f"{file_location.split('/')[7].split('.')[0]}_{i:02}.json",
                     )
 
-    def generate_kerchunk(self, ds: bool = False):
+    def generate_kerchunk(self, ds: bool = False, kill_tmp_dir: bool = True):
         # pattern = re.compile(r"[A-Za-z]\d\d(?![^ ]*[\\\/])", re.IGNORECASE)
         file_list = glob.glob(f"{self.directory}/*")
         mzz = MultiZarrToZarr(
