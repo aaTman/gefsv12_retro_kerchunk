@@ -15,7 +15,7 @@ import numpy as np
 import pandas as pd
 import pytz
 import ujson
-from kerchunk.combine import MultiZarrToZarr
+from kerchunk.combine import MultiZarrToZarr # type: ignore
 
 from . import utils
 
