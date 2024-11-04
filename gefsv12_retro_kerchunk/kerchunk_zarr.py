@@ -227,7 +227,6 @@ class RetrospectivePull:
                     )
 
     def generate_kerchunk(self, ds: bool = False, kill_tmp_dir: bool = True):
-        # pattern = re.compile(r"[A-Za-z]\d\d(?![^ ]*[\\\/])", re.IGNORECASE)
         file_list = glob.glob(f"{self.directory}/*")
         mzz = MultiZarrToZarr(
             file_list,
