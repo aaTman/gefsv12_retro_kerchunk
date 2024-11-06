@@ -69,10 +69,11 @@ class RetrospectivePull:
         centered_date_range: int = 10,
         forecast_horizon: str = "Days:1-10",
         members: Union[None, str, List[str]] = None,
+        **kwargs,
     ):
-        if directory is None:
-            self.td = TemporaryDirectory()
-            self.directory = self.td.name
+        self.directory = kwargs.get("directory", None)
+        self._temp_dir = TemporaryDirectory() if directory is None else None
+        self.directory = directory if directory is not None else self._temp_dir.name
         self.date = date
         self.fhour = fhour
         self.message_num = self.fhour_to_message_num()
