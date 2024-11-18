@@ -15,7 +15,7 @@ import numpy as np
 import pandas as pd
 import pytz
 import ujson
-from kerchunk.combine import MultiZarrToZarr
+from kerchunk.combine import MultiZarrToZarr # type: ignore
 
 from . import utils
 
@@ -226,8 +226,7 @@ class RetrospectivePull:
                         f"{file_location.split('/')[7].split('.')[0]}_{i:02}.json",
                     )
 
-    def generate_kerchunk(self, ds: bool = False):
-        # pattern = re.compile(r"[A-Za-z]\d\d(?![^ ]*[\\\/])", re.IGNORECASE)
+    def generate_kerchunk(self, ds: bool = False, kill_tmp_dir: bool = True):
         file_list = glob.glob(f"{self.directory}/*")
         mzz = MultiZarrToZarr(
             file_list,
@@ -235,6 +234,8 @@ class RetrospectivePull:
             identical_dims=["latitude", "longitude"],
         )
         multi_kerchunk = mzz.translate()
+        if kill_tmp_dir:
+            self.td.cleanup()
         if ds:
             ds = utils.create_xarray_from_kerchunks(multi_kerchunk)
             return ds
